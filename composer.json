@@ -1,0 +1,23 @@
+{
+    "name": "theuargb/magento2-steroids",
+    "description": "Performance and reliability steroids for Magento 2 — powered by neuron-ai",
+    "type": "magento2-module",
+    "version": "2.0.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": ">=103.0",
+        "inspector-apm/neuron-ai": "^2.0"
+    },
+    "autoload": {
+        "files": [
+            "src/Theuargb/Steroids/registration.php"
+        ],
+        "psr-4": {
+            "Theuargb\\Steroids\\": "src/Theuargb/Steroids"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Theuargb_Steroids::healing"
+             title="AI Self-Healing"
+             module="Theuargb_Steroids"
+             sortOrder="900"
+             resource="Theuargb_Steroids::healing"/>
+        <add id="Theuargb_Steroids::healing_log"
+             title="Healing Log"
+             module="Theuargb_Steroids"
+             parent="Theuargb_Steroids::healing"
+             action="steroids/healinglog/index"
+             resource="Theuargb_Steroids::healing_log"
+             sortOrder="10"/>
+    </menu>
+</config>

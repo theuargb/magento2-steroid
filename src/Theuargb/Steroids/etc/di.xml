@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Plugin: intercept all HTTP requests at the outermost level -->
+    <type name="Magento\Framework\App\Http">
+        <plugin name="theuargb_steroids_intercept"
+                type="Theuargb\Steroids\Plugin\AppHttpPlugin"
+                sortOrder="1"/>
+    </type>
+
+    <!-- Interface preferences -->
+    <preference for="Theuargb\Steroids\Api\AgentClientInterface"
+                type="Theuargb\Steroids\Model\AgentClient"/>
+    <preference for="Theuargb\Steroids\Api\HealingAttemptRepositoryInterface"
+                type="Theuargb\Steroids\Model\HealingAttemptRepository"/>
+    <preference for="Theuargb\Steroids\Api\Data\HealingAttemptInterface"
+                type="Theuargb\Steroids\Model\HealingAttempt"/>
+    <preference for="Theuargb\Steroids\Api\Data\HomepageSnapshotInterface"
+                type="Theuargb\Steroids\Model\HomepageSnapshot"/>
+
+    <!-- UI Component Data Provider for Healing Log grid -->
+    <virtualType name="Theuargb\Steroids\Model\ResourceModel\HealingAttempt\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">steroids_attempt</argument>
+            <argument name="resourceModel" xsi:type="string">Theuargb\Steroids\Model\ResourceModel\HealingAttempt</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="steroids_healinglog_listing_data_source" xsi:type="string">Theuargb\Steroids\Model\ResourceModel\HealingAttempt\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Virtual type for dedicated logger -->
+    <virtualType name="Theuargb\Steroids\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/steroids.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Theuargb\Steroids\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Theuargb\Steroids\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Inject dedicated logger into orchestrator components -->
+    <type name="Theuargb\Steroids\Model\HealingOrchestrator">
+        <arguments>
+            <argument name="logger" xsi:type="object">Theuargb\Steroids\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Theuargb\Steroids\Plugin\AppHttpPlugin">
+        <arguments>
+            <argument name="logger" xsi:type="object">Theuargb\Steroids\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Theuargb\Steroids\Model\AgentClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">Theuargb\Steroids\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Theuargb\Steroids\Model\HomepageSnapshotManager">
+        <arguments>
+            <argument name="logger" xsi:type="object">Theuargb\Steroids\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Theuargb\Steroids\Model\FallbackCache">
+        <arguments>
+            <argument name="logger" xsi:type="object">Theuargb\Steroids\Logger\Logger</argument>
+        </arguments>
+    </type>
+</config>
